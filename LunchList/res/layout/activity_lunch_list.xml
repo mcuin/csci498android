@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:typeface = "monospace"
         android:text="Name" />
 
     <EditText
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:typeface = "monospace"
         android:ems="10" >
 
         <requestFocus />
@@ -46,6 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout2"
+        android:typeface = "serif"
+        android:textColor = "#0099FF"
         android:text="Address" />
 
     <EditText
@@ -54,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout2"
         android:layout_centerHorizontal="true"
+        android:typeface = "serif"
         android:ems="10" />
 
     <Button
