@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -26,6 +25,7 @@ public class LunchList extends Activity {
 	AutoCompleteTextView address;
 	ArrayAdapter<String> autoAdapter = null;
 	private String[] addresses;
+	
 	
 	
 
@@ -85,30 +85,86 @@ public class LunchList extends Activity {
 		
 		public View getView( int position, View convertView, ViewGroup parent ) {
 			View row = convertView;
+			RestaurantHolder holder = null;
+			int type = getItemViewType( position );
 			
 			if( row == null ) {
 				LayoutInflater inflater = getLayoutInflater();
-				row = inflater.inflate( R.layout.row, null);
-			}
-			
-			Restaurant r = model.get( position );
-			
-			(( TextView )row.findViewById( R.id.title )).setText( r.getName() );
-			(( TextView )row.findViewById( R.id.address )).setText( r.getAddress() );
-			
-			ImageView icon = ( ImageView )row.findViewById( R.id.icon );
-			
-			if( r.getType().equals("sit_down")) {
-				icon.setImageResource( R.drawable.ball_red);
-			}
-			else if( r.getType().equals("take_out")) {
-				icon.setImageResource( R.drawable.ball_yellow );
+				//row = inflater.inflate( R.layout.row, null);
+				switch( type ) {
+				  case 1:
+					  row = inflater.inflate( R.layout.row_sit, parent, false );
+					  break;
+				  case 2:
+					  row = inflater.inflate( R.layout.row_take, parent, false );
+					  break;
+				  case 3:
+					  row = inflater.inflate( R.layout.row, parent, false );
+					  break;
+				}
+				holder = new RestaurantHolder( row );
+				row.setTag( holder );
 			}
 			else {
-				icon.setImageResource( R.drawable.ball_green);
+				holder = ( RestaurantHolder )row.getTag();
 			}
 			
+			holder.populateFrom( model.get( position ) );
+			
 			return( row );
-			}		
+			}
+		
+		@Override
+		  public int getItemViewType( int position ) {
+			Restaurant r = model.get( position );
+			
+			if( r.getType().equals( "sit_down") ) {
+				return 1;
+			}
+			else if( r.getType().equals( "take_out" ) ){
+				return 2;
+			}
+			else {
+				return 3;
+			}
 		}
-	}
+		
+		@Override
+		public int getViewTypeCount() {
+			return 3;
+		}
+			}
+		}
+	
+	class RestaurantHolder {
+		private TextView name = null;
+		private TextView address = null;
+		private ImageView icon = null;
+		
+		RestaurantHolder( View row ) {
+			name = ( TextView )row.findViewById( R.id.title );
+			address = ( TextView )row.findViewById( R.id.address );
+			icon = ( ImageView )row.findViewById( R.id.icon );
+		}
+		
+		void populateFrom( Restaurant r ) {
+			name.setText( r.getName() );
+			address.setText( r.getAddress() );
+			
+			if( r.getType().equals( "sit_down") ) {
+				icon.setImageResource( R.drawable.ball_red );
+				name.setTextColor(Color.GREEN);
+				address.setTextColor(Color.GREEN);
+			}
+			else if( r.getType().equals( "take_out" ) ) {
+				icon.setImageResource( R.drawable.ball_yellow );
+				name.setTextColor(Color.BLUE);
+				address.setTextColor(Color.BLUE);
+			}
+			else {
+				icon.setImageResource( R.drawable.ball_green );
+				name.setTextColor(Color.CYAN);
+				address.setTextColor(Color.CYAN);
+			}
+			}
+		}
