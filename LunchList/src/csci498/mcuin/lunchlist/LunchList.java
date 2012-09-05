@@ -18,10 +18,12 @@ import android.widget.Spinner;
 public class LunchList extends Activity {
 	
 	List<Restaurant> model = new ArrayList<Restaurant>();
-	ArrayAdapter<Restaurant> adapter = null;
+	RestaurantAdapter adapter = null;
 	AutoCompleteTextView address;
 	ArrayAdapter<String> autoAdapter = null;
 	private String[] addresses;
+	
+	
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,8 @@ public class LunchList extends Activity {
         save.setOnClickListener( onSave );
         
         Spinner list= (Spinner)findViewById( R.id.resturants );
-        adapter = new ArrayAdapter<Restaurant>( this, android.R.layout.simple_list_item_1, model );
+        
+        adapter = new RestaurantAdapter();
         
         list.setAdapter( adapter );
         
@@ -70,4 +73,10 @@ public class LunchList extends Activity {
 				adapter.add( r );
 			}
 	};
+	
+	class RestaurantAdapter extends ArrayAdapter<Restaurant> {
+		RestaurantAdapter() {
+			super( LunchList.this, android.R.layout.simple_list_item_1, model );
+		}
+	}
 }
