@@ -15,8 +15,8 @@ import android.widget.RadioButton;
 
 public class LunchList extends Activity {
 	
-	List<Resturant> model = new ArrayList<Resturant>();
-	ArrayAdapter<Resturant> adapter = null;
+	List<Restaurant> model = new ArrayList<Restaurant>();
+	ArrayAdapter<Restaurant> adapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,14 +27,14 @@ public class LunchList extends Activity {
         save.setOnClickListener( onSave );
         
         ListView list= (ListView)findViewById( R.id.resturants );
-        adapter = new ArrayAdapter<Resturant>( this, android.R.layout.simple_list_item_1, model );
+        adapter = new ArrayAdapter<Restaurant>( this, android.R.layout.simple_list_item_1, model );
         
         list.setAdapter( adapter );
     }
 
     private View.OnClickListener onSave = new View.OnClickListener() {
 		public void onClick(View v) {
-			Resturant r = new Resturant();
+			Restaurant r = new Restaurant();
 			EditText name = ( EditText )findViewById( R.id.name );
 			EditText address = ( EditText )findViewById( R.id.addr );
 					

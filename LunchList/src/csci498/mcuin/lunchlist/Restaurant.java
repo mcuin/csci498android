@@ -1,6 +1,6 @@
 package csci498.mcuin.lunchlist;
 
-public class Resturant {
+public class Restaurant {
 	private String name = "";
 	private String address = "";
 	private String type = "";
