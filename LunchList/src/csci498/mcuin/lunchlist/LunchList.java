@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,7 +28,6 @@ public class LunchList extends Activity {
 	private String[] addresses;
 	
 	
-	
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class LunchList extends Activity {
         Button save = ( Button )findViewById( R.id.save );
         save.setOnClickListener( onSave );
         
-        Spinner list= (Spinner)findViewById( R.id.resturants );
+        ListView list= (ListView)findViewById( R.id.resturants );
         
         adapter = new RestaurantAdapter();
         
@@ -86,22 +86,10 @@ public class LunchList extends Activity {
 		public View getView( int position, View convertView, ViewGroup parent ) {
 			View row = convertView;
 			RestaurantHolder holder = null;
-			int type = getItemViewType( position );
 			
 			if( row == null ) {
 				LayoutInflater inflater = getLayoutInflater();
-				//row = inflater.inflate( R.layout.row, null);
-				switch( type ) {
-				  case 1:
-					  row = inflater.inflate( R.layout.row_sit, parent, false );
-					  break;
-				  case 2:
-					  row = inflater.inflate( R.layout.row_take, parent, false );
-					  break;
-				  case 3:
-					  row = inflater.inflate( R.layout.row, parent, false );
-					  break;
-				}
+				row = inflater.inflate( R.layout.row, null);
 				holder = new RestaurantHolder( row );
 				row.setTag( holder );
 			}
@@ -112,31 +100,10 @@ public class LunchList extends Activity {
 			holder.populateFrom( model.get( position ) );
 			
 			return( row );
-			}
-		
-		@Override
-		  public int getItemViewType( int position ) {
-			Restaurant r = model.get( position );
-			
-			if( r.getType().equals( "sit_down") ) {
-				return 1;
-			}
-			else if( r.getType().equals( "take_out" ) ){
-				return 2;
-			}
-			else {
-				return 3;
-			}
-		}
-		
-		@Override
-		public int getViewTypeCount() {
-			return 3;
-		}
-			}
+			}		
 		}
 	
-	class RestaurantHolder {
+	static class RestaurantHolder {
 		private TextView name = null;
 		private TextView address = null;
 		private ImageView icon = null;
@@ -168,3 +135,4 @@ public class LunchList extends Activity {
 			}
 			}
 		}
+	}
