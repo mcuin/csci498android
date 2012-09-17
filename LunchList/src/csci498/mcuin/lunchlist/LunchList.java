@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ public class LunchList extends TabActivity {
 	EditText name = null;
     EditText address = null;
     RadioGroup types = null;
+    EditText notes = null;
     
 	
 	
@@ -38,6 +40,9 @@ public class LunchList extends TabActivity {
 	    name = ( EditText )findViewById( R.id.name );
 		address = ( EditText )findViewById( R.id.addr );
 		types = ( RadioGroup )findViewById( R.id.types );
+		notes = ( EditText )findViewById( R.id.notes );
+		
+		
         
         Button save = ( Button )findViewById( R.id.save );
         save.setOnClickListener( onSave );
@@ -61,9 +66,10 @@ public class LunchList extends TabActivity {
         
         getTabHost().addTab( spec );
         
-        getTabHost().setCurrentTab(0); 
+        getTabHost().setCurrentTab(0);
         
         list.setOnItemClickListener( onListClick );
+        
     }
 
 	private View.OnClickListener onSave = new View.OnClickListener() {
@@ -71,6 +77,7 @@ public class LunchList extends TabActivity {
 			Restaurant r = new Restaurant();
 			r.setName( name.getText().toString() );
 			r.setAddress( address.getText().toString() );
+			r.setNotes( notes.getText().toString() );
 			
 				
 				switch ( types.getCheckedRadioButtonId() ) {
@@ -94,6 +101,7 @@ public class LunchList extends TabActivity {
 			
 			name.setText( r.getName() );
 			address.setText( r.getAddress() );
+			notes.setText( r.getNotes() );
 			
 			if( r.getType().equals("sit_down")) {
 				types.check( R.id.sit_down );
@@ -126,7 +134,6 @@ public class LunchList extends TabActivity {
 			
 			(( TextView )row.findViewById( R.id.title )).setText( r.getName() );
 			(( TextView )row.findViewById( R.id.address )).setText( r.getAddress() );
-			
 			ImageView icon = ( ImageView )row.findViewById( R.id.icon );
 			
 			if( r.getType().equals("sit_down")) {
