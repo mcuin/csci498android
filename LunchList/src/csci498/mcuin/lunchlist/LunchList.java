@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.app.TabActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,6 +33,7 @@ public class LunchList extends TabActivity {
     RadioGroup types = null;
     EditText notes = null;
     Restaurant current = null;
+    int progress = 0;
     
 	
 	
@@ -38,6 +41,7 @@ public class LunchList extends TabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature( Window.FEATURE_PROGRESS );
         setContentView(R.layout.activity_lunch_list);
         
 	    name = ( EditText )findViewById( R.id.name );
@@ -95,6 +99,9 @@ public class LunchList extends TabActivity {
     		
     		return( true );
     	}
+    	else if( item.getItemId() == R.id.run ) {
+    		new Thread( longTask ).start();
+    	}
     	
     	return( super.onOptionsItemSelected( item ) );
     }
@@ -120,6 +127,18 @@ public class LunchList extends TabActivity {
 				}
 				adapter.add( r );
 			}
+	};
+	
+	private void doSomeLongWork( final int incr ) {
+		SystemClock.sleep( 250 );
+	}
+	
+	private Runnable longTask = new Runnable() {
+		public void run() {
+			for( int i = 0; i < 20; i++ ) {
+				doSomeLongWork( 500 );
+			}
+		}
 	};
 	
 	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
