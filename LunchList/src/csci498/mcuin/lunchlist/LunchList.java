@@ -6,19 +6,21 @@ import java.util.List;
 import android.os.Bundle;
 import android.app.TabActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LunchList extends TabActivity {
 	
@@ -28,6 +30,7 @@ public class LunchList extends TabActivity {
     EditText address = null;
     RadioGroup types = null;
     EditText notes = null;
+    Restaurant current = null;
     
 	
 	
@@ -70,6 +73,30 @@ public class LunchList extends TabActivity {
         
         list.setOnItemClickListener( onListClick );
         
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+    	new MenuInflater( this ).inflate( R.menu.option, menu );
+    	
+    	return( super.onCreateOptionsMenu( menu ) );
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+    	if( item.getItemId() == R.id.toast ) {
+    		String message = "No restaurant selected";
+    		
+    		if( current != null ) {
+    			message = current.getNotes();
+    		}
+    		
+    		Toast.makeText( this, message, Toast.LENGTH_LONG).show();
+    		
+    		return( true );
+    	}
+    	
+    	return( super.onOptionsItemSelected( item ) );
     }
 
 	private View.OnClickListener onSave = new View.OnClickListener() {
@@ -122,31 +149,48 @@ public class LunchList extends TabActivity {
 			super( LunchList.this, android.R.layout.simple_list_item_1, model );
 		}
 		
+		@Override
 		public View getView( int position, View convertView, ViewGroup parent ) {
 			View row = convertView;
+			RestaurantHolder holder = null;
 			
 			if( row == null ) {
 				LayoutInflater inflater = getLayoutInflater();
 				row = inflater.inflate( R.layout.row, null);
+				holder = new RestaurantHolder( row );
+				row.setTag( holder );
+			} else {
+				holder = ( RestaurantHolder )row.getTag();
 			}
 			
-			Restaurant r = model.get( position );
-			
-			(( TextView )row.findViewById( R.id.title )).setText( r.getName() );
-			(( TextView )row.findViewById( R.id.address )).setText( r.getAddress() );
-			ImageView icon = ( ImageView )row.findViewById( R.id.icon );
-			
-			if( r.getType().equals("sit_down")) {
-				icon.setImageResource( R.drawable.ball_red);
-			}
-			else if( r.getType().equals("take_out")) {
-				icon.setImageResource( R.drawable.ball_yellow );
-			}
-			else {
-				icon.setImageResource( R.drawable.ball_green);
-			}
+			holder.populateFrom( model.get(position) );
 			
 			return( row );
 			}		
 		}
+	
+	static class RestaurantHolder {
+		private TextView name = null;
+		private TextView address = null;
+		private ImageView icon = null;
+		
+		RestaurantHolder( View row ) {
+			name = ( TextView )row.findViewById( R.id.title );
+			address = ( TextView )row.findViewById( R.id.address );
+			icon = ( ImageView )row.findViewById( R.id.icon );
+		}
+		
+		void populateFrom( Restaurant r ) {
+			name.setText( r.getName() );
+			address.setText( r.getAddress() );
+			
+			if( r.getType().equals( "sit_down") ) {
+				icon.setImageResource( R.drawable.ball_red );
+			} else if ( r.getType().equals( "take_out ") ) {
+				icon.setImageResource( R.drawable.ball_yellow );
+			} else {
+				icon.setImageResource( R.drawable.ball_green );
+			}
+		}
+	}
 	}
