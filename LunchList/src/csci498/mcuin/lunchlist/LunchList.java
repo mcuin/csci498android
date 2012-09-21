@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 public class LunchList extends TabActivity {
 	
-	Cursor model = new Cursor();
+	Cursor model = null;
 	RestaurantAdapter adapter = null;
 	RestaurantHelper helper = null;
 	EditText name = null;
@@ -100,22 +100,25 @@ public class LunchList extends TabActivity {
 					  type = ( "delivery" );
 					  break;
 				}
-				helper.insert( name.getText().toString(), address.getText().toString(), type, notes.getText().toString() );
+				helper.insert( name.getText().toString(), address.getText().toString(), 
+						type, notes.getText().toString() );
+				
+				model.requery();
 			}
 	};
 	
 	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
 		public void onItemClick( AdapterView<?> parent, View view, int position, long id) {
-		    current = model.get( position );
+		    model.moveToPosition( position );
 			
-			name.setText( current.getName() );
-			address.setText( current.getAddress() );
-			notes.setText( current.getNotes() );
+			name.setText( helper.getName( model ) );
+			address.setText( helper.getAddress( model ) );
+			notes.setText( helper.getNotes( model ) );
 			
-			if( current.getType().equals("sit_down")) {
+			if( helper.getType( model ).equals("sit_down")) {
 				types.check( R.id.sit_down );
 			}
-			else if( current.getType().equals("take_out")) {
+			else if( helper.getType( model ).equals("take_out")) {
 				types.check( R.id.take_out );
 			}
 			else {
