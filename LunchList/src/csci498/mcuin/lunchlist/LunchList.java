@@ -1,25 +1,20 @@
 package csci498.mcuin.lunchlist;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
-import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.app.ListActivity;
 
@@ -34,6 +29,7 @@ public class LunchList extends ListActivity {
     RadioGroup types = null;
     EditText notes = null;
     Restaurant current = null;
+    public final static String ID_EXTRA = "csci498.mcuin.lunchlist._ID";
 	
 	
 
@@ -56,11 +52,30 @@ public class LunchList extends ListActivity {
     	
     	helper.close();
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+    	new MenuInflater( this ).inflate( R.menu.option, menu );
+    	
+    	return( super.onCreateOptionsMenu( menu ) );
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+    	if( item.getItemId() == R.id.add ) {
+    		startActivity( new Intent( LunchList.this, DetailForm.class ) );
+    		
+    		return( true );
+    	}
+    	
+    	return( super.onOptionsItemSelected( item ) );
+    }
 
     AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
 		public void onItemClick( AdapterView<?> parent, View view, int position, long id) {
 		    Intent i = new Intent( LunchList.this, DetailForm.class );
 		    
+		    i.putExtra( ID_EXTRA, String.valueOf( id ));
 		    startActivity( i );
 		}
 	};
