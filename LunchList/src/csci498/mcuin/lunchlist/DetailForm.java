@@ -74,15 +74,23 @@ public class DetailForm extends Activity {
 				
 				switch ( types.getCheckedRadioButtonId() ) {
 				  case R.id.sit_down:
-					  type = ( "sit_down" );
+					  type = "sit_down";
 					  break;
 				  case R.id.take_out:
-					  type = ( "take_out" );
+					  type = "take_out";
 					  break;
 				  case R.id.delivery:
-					  type = ( "delivery" );
+					  type = "delivery";
 					  break;
 				}
+				
+				if( restaurantId == null ) {
+					helper.insert( name.getText().toString(), address.getText().toString(), type, notes.getText().toString() );
+				} else {
+					helper.update( restaurantId, name.getText().toString(), address.getText().toString(), type, notes.getText().toString() );
+				}
+				
+				finish();
 		}
 	};
 

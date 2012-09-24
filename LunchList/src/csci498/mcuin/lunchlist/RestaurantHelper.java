@@ -18,8 +18,7 @@ class RestaurantHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate( SQLiteDatabase db ) {
-		db.execSQL( "CREATE TABLE restaurants ( _id INTEGER PRIMARY KEY AUTOINCREMENT,  " +
-				"name TEXT, address TEXT, type TEXT, notes TEXT );" );
+		db.execSQL( "CREATE TABLE restaurants ( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, address TEXT, type TEXT, notes TEXT );" );
 	}
 	
 	@Override
@@ -37,13 +36,25 @@ class RestaurantHelper extends SQLiteOpenHelper {
 		getWritableDatabase().insert( "restaurants", "name", cv );
 	}
 	
+	public void update( String id, String name, String address, String type, String notes ) {
+		ContentValues cv = new ContentValues();
+		String[] args = { id };
+		
+		cv.put( "name", name );
+		cv.put( "address", address );
+		cv.put( "type", type );
+		cv.put( "notes", notes );
+		
+		getWritableDatabase().update( "restaurants", cv, "_ID = ?", args ); 
+	}
+	
 	public Cursor getAll() {
 		return( getReadableDatabase().rawQuery( "SELECT _id, name, address, type, notes FROM restaurants " +
 				"ORDER BY name", null ) );
 	}
 	
 	public String getName( Cursor c) {
-		return( c.getString(1) );
+		return( c.getString( 1 ) );
 	}
 	
 	public String getAddress( Cursor c ) {
@@ -61,7 +72,6 @@ class RestaurantHelper extends SQLiteOpenHelper {
 	public Cursor getById( String id ) {
 		String[] args = { id };
 		
-		return( getReadableDatabase().rawQuery( "Select _id, name, " +
-				"address, type, notes FROM restaurants WHERE _ID = ?", args ) );
+		return( getReadableDatabase().rawQuery( "Select _id, name, address, type, notes FROM restaurants WHERE _ID = ?", args ) );
 	}
 }

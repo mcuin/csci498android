@@ -24,11 +24,6 @@ public class LunchList extends ListActivity {
 	Cursor model = null;
 	RestaurantAdapter adapter = null;
 	RestaurantHelper helper = null;
-	EditText name = null;
-    EditText address = null;
-    RadioGroup types = null;
-    EditText notes = null;
-    Restaurant current = null;
     public final static String ID_EXTRA = "csci498.mcuin.lunchlist._ID";
 	
 	
@@ -87,7 +82,7 @@ public class LunchList extends ListActivity {
 		
 		@Override
 		public void bindView( View row, Context ctxt, Cursor c ) {
-			RestaurantHolder holder = (RestaurantHolder)row.getTag();
+			RestaurantHolder holder = ( RestaurantHolder )row.getTag();
 			
 			holder.populateFrom( c, helper );
 		}
@@ -100,10 +95,6 @@ public class LunchList extends ListActivity {
 				RestaurantHolder holder = new RestaurantHolder( row );
 				
 				row.setTag( holder );
-				
-				holder = ( RestaurantHolder )row.getTag();
-			
-			
 			
 			return( row );
 			}		
