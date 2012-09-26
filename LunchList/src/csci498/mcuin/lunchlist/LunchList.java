@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.app.ListActivity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 
 public class LunchList extends ListActivity {
@@ -25,6 +27,7 @@ public class LunchList extends ListActivity {
 	RestaurantAdapter adapter = null;
 	RestaurantHelper helper = null;
     public final static String ID_EXTRA = "csci498.mcuin.lunchlist._ID";
+    SharedPreferences prefs = null;
 	
 	
 
@@ -33,12 +36,10 @@ public class LunchList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lunch_list);
         
+        prefs = PreferenceManager.getDefaultSharedPreferences( this );
         helper = new RestaurantHelper( this );
-        model = helper.getAll();
-        startManagingCursor( model );
-        adapter = new RestaurantAdapter( model );
-        setListAdapter( adapter );
-        
+        initList();
+        prefs.registerOnSharedPreferenceChangeListener( prefListener );
     }
     
     @Override
@@ -78,6 +79,28 @@ public class LunchList extends ListActivity {
 		    startActivity( i );
 		}
 	};
+	
+	private SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+		
+		public void onSharedPreferenceChanged(SharedPreferences sharedPrefs,
+				String key) {
+			if( key.equals( "sort_order" ) ){
+				initList();
+			}
+		}
+	};
+	
+	private void initList() {
+		if( model != null ) {
+			stopManagingCursor( model );
+			model.close();
+		}
+		
+		 model = helper.getAll( prefs.getString( "sort_order", "name" ) );
+	     startManagingCursor( model );
+	     adapter = new RestaurantAdapter( model );
+	     setListAdapter( adapter );
+	}
 	
 	class RestaurantAdapter extends CursorAdapter {
 		RestaurantAdapter( Cursor c ) {
