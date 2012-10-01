@@ -41,6 +41,17 @@ public class DetailForm extends Activity {
         
 	}
 	
+	@Override
+	public void onSaveInstanceState( Bundle state ) {
+		super.onSaveInstanceState( state );
+		
+		name.setText( state.getString( "name" ) );
+		address.setText( state.getString( "address" ) );
+		notes.setText( state.getString( "notes" ) );
+		types.check( state.getInt( "type" ) );
+		
+	}
+	
 	private void load() {
 		Cursor c = helper.getById( restaurantId );
 		
