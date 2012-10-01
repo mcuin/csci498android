@@ -3,6 +3,8 @@ package csci498.mcuin.lunchlist;
 import android.app.Activity;
 import android.os.Bundle;
 import android.database.Cursor;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ public class DetailForm extends Activity {
 	RadioGroup types = null;
 	RestaurantHelper helper = null;
 	String restaurantId = null;
+	EditText feed = null;
 	
 	@Override
 	public void onCreate( Bundle savedInstanceState ) {
@@ -28,6 +31,7 @@ public class DetailForm extends Activity {
 		address = ( EditText )findViewById( R.id.addr );
 		types = ( RadioGroup )findViewById( R.id.types );
 		notes = ( EditText )findViewById( R.id.notes );
+		feed = ( EditText )findViewById( R.id.feed );
 		
 		
         
@@ -52,6 +56,14 @@ public class DetailForm extends Activity {
 		
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu( Menu menu ) {
+		new MenuInflater( this ).inflate( R.menu.details_option, menu );
+		
+		return super.onCreateOptionsMenu( menu );
+		
+	}
+	
 	private void load() {
 		Cursor c = helper.getById( restaurantId );
 		
@@ -59,6 +71,7 @@ public class DetailForm extends Activity {
 		name.setText( helper.getName( c ) );
 		address.setText( helper.getAddress( c ) );
 		notes.setText( helper.getNotes( c ) );
+		feed.setText( helper.getFeed( c ) );
 		
 		if( helper.getType( c ).equals( "sit_down") ) {
 			types.check( R.id.sit_down );
@@ -96,9 +109,11 @@ public class DetailForm extends Activity {
 				}
 				
 				if( restaurantId == null ) {
-					helper.insert( name.getText().toString(), address.getText().toString(), type, notes.getText().toString() );
+					helper.insert( name.getText().toString(), address.getText().toString(),
+							type, notes.getText().toString(), feed.getText().toString() );
 				} else {
-					helper.update( restaurantId, name.getText().toString(), address.getText().toString(), type, notes.getText().toString() );
+					helper.update( restaurantId, name.getText().toString(), address.getText().toString(), 
+							type, notes.getText().toString(), feed.getText().toString() );
 				}
 				
 				finish();

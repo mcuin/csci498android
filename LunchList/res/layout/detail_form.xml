@@ -50,8 +50,6 @@
         </RadioGroup>
 
     </TableRow>
-    
-    <TableRow>
         <TextView android:text = "Notes:"  
             />
         <EditText android:id = "@+id/notes"
@@ -59,11 +57,13 @@
             android:gravity = "top"
             android:lines = "2"
             android:scrollHorizontally = "false"
-            android:maxLines = "2"
-            />
+            android:maxLines = "2" 
+            android:hint = "Notes" />
+        
+        <EditText android:id = "@+id/feed"
+            android:hint = "Feed URL" />
 
 
-        </TableRow>
     <Button
         android:id="@+id/save"
         android:layout_width="match_parent"
