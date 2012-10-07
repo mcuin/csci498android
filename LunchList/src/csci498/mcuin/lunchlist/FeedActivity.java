@@ -12,8 +12,12 @@ import org.mcsoxford.rss.RSSReader;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,17 +33,22 @@ public class FeedActivity extends Activity {
 	public void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		
-		state = (InstanceState)getLastNonConfigurationInstance();
+		state = ( InstanceState )getLastNonConfigurationInstance();
 		
 		if ( state == null ) {
 			state = new InstanceState();
-			state.task = new FeedTask( this );
-			state.task.execute( getIntent().getStringExtra( FEED_URL ) );
+			state.handler = new FeedHandler( this );
+			Intent i = new Intent( this, FeedService.class );
+		
+			i.putExtra( FeedService.EXTRA_URL, getIntent().getStringExtra( FEED_URL ) );
+			i.putExtra( FeedService.EXTRA_MESSENGER, new Messenger( state.handler ) );
+			
+			startService( i );
 			
 		}
 		else {
-			if ( state.task != null ) {
-				state.task.attach( this );
+			if ( state.handler != null ) {
+				state.handler.attach( this );
 				
 			}
 			
@@ -52,8 +61,8 @@ public class FeedActivity extends Activity {
 	
 	@Override
 	public Object onRetainNonConfigurationInstance() {
-		if ( state.task != null ) {
-			state.task.detach();
+		if ( state.handler != null ) {
+			state.handler.detach();
 			
 		}
 		
@@ -71,18 +80,17 @@ public class FeedActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder( this );
 		
 		builder
-			.setTitle( "Exception!" );
-			.setMessage( t.toString() );
-			.setPositiveButton( "Ok", null );
-			.show();
+		  .setTitle( "Exception!" );
+		  .setMessage( t.toString() );
+		  .setPositiveButton( "Ok", null );
+		  .show();
 		
 	}
 	
-	private static class FeedTask extends AsyncTask< String, Void, RSSFeed > {
-		private Exception e = null;
+	private static class FeedHandler extends Handler {
 		private FeedActivity activity = null;
 		
-		FeedTask( FeedActivity activity ) {
+		FeedHandler( FeedActivity activity ) {
 			attach( activity );
 		}
 		
@@ -95,23 +103,11 @@ public class FeedActivity extends Activity {
 		}
 		
 		@Override
-		public RSSFeed doInBackground( String... urls ) {
-			
-			
-			Properties systemSettings = System.getProperties();
-			
-			systemSettings.put( "http.proxyHost", "your.proxy.host.here" );
-			systemSettings.put( "http.proxyPort", "8080" );
-			
-			
-		}
-		
-		@Override
-		public void onPostExecute( RSSFeed feed ) {
-			if ( e == null ) {
-				Log.e( "LunchList", "Exception parsing feed", e );
-				activity.goBlooey( e );
-				
+		public void handleMessage( Message msg ) {
+			if ( msg.arg1 == RESULT_OK ) {
+				activity.setFeed( ( RSSFeed )msg.obj );
+			} else {
+				activity.goBlooey( ( Exception )msg.obj );
 			}
 		}
 	}
@@ -162,7 +158,7 @@ public class FeedActivity extends Activity {
 	
 	private static class InstanceState {
 		RSSFeed feed = null;
-		FeedTask task = null;
+		FeedHandler handler = null;
 		
 	}
 	
