@@ -81,7 +81,6 @@ public class FeedActivity extends Activity {
 	private static class FeedTask extends AsyncTask< String, Void, RSSFeed > {
 		private Exception e = null;
 		private FeedActivity activity = null;
-		private RSSReader reader = new RSSReader();
 		
 		FeedTask( FeedActivity activity ) {
 			attach( activity );
@@ -97,26 +96,13 @@ public class FeedActivity extends Activity {
 		
 		@Override
 		public RSSFeed doInBackground( String... urls ) {
-			RSSFeed result = null;
+			
 			
 			Properties systemSettings = System.getProperties();
 			
 			systemSettings.put( "http.proxyHost", "your.proxy.host.here" );
 			systemSettings.put( "http.proxyPort", "8080" );
 			
-			try {
-				
-				result = reader.load( urls[0] );
-				
-			}
-			
-			catch ( Exception e ) {
-				
-				this.e = e;
-				
-			}
-			
-			return result;
 			
 		}
 		
