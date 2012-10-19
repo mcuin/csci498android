@@ -73,19 +73,17 @@ public class FeedActivity extends Activity {
 	private void setFeed( RSSFeed feed ) {
 		state.feed = feed;
 		
-		setListAdapter( new FeedAdapter( feed ) );
+		setListAdapter(new FeedAdapter( feed ) );
 	}
-	
-	private void goBlooey( Throwable t ) {
-		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-		
-		builder
-		  .setTitle( "Exception!" );
-		  .setMessage( t.toString() );
-		  .setPositiveButton( "Ok", null );
-		  .show();
-		
+	private void goBlooey(Throwable t) {
+	AlertDialog.Builder builder = new AlertDialog.Builder( this );
+	builder
+		.setTitle( "Exception!" )
+		.setMessage( t.toString() )
+		.setPositiveButton( "OK", null )
+		.show();
 	}
+
 	
 	private static class FeedHandler extends Handler {
 		private FeedActivity activity = null;
