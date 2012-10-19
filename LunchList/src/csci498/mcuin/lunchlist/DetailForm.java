@@ -25,6 +25,7 @@ public class DetailForm extends Activity {
 	RestaurantHelper helper = null;
 	String restaurantId = null;
 	EditText feed = null;
+	TextView location = null;
 	
 	@Override
 	public void onCreate( Bundle savedInstanceState ) {
@@ -37,11 +38,7 @@ public class DetailForm extends Activity {
 		types = ( RadioGroup )findViewById( R.id.types );
 		notes = ( EditText )findViewById( R.id.notes );
 		feed = ( EditText )findViewById( R.id.feed );
-		
-		
-        
-        Button save = ( Button )findViewById( R.id.save );
-        save.setOnClickListener( onSave );
+		location = ( TextView )findViewById( R.id.location );
         
         restaurantId = getIntent().getStringExtra( LunchList.ID_EXTRA );
         if( restaurantId != null) {
@@ -92,6 +89,12 @@ public class DetailForm extends Activity {
 		
 	}
 	
+	@Override
+	public void onPause() {
+		save();
+		super.onPause();
+	}
+	
 	private boolean isNetworkAvailable() {
 		ConnectivityManager cm = ( ConnectivityManager ).getSystemService( CONNECTIVITY_SERVICE );
 		NetworkInfo info = cm.getActiveNetworkInfo();
@@ -117,6 +120,9 @@ public class DetailForm extends Activity {
 			types.check( R.id.delivery );
 		}
 		
+		location.setText( String.valueOf( helper.getLatitude( c ) ) + ", " +
+		String.valueOf( helper.getLongitute( c ) ) );
+		
 		c.close();
 	}
 	
@@ -127,8 +133,8 @@ public class DetailForm extends Activity {
 		helper.close();
 	}
 	
-	private View.OnClickListener onSave = new View.OnClickListener() {
-		public void onClick(View v) {
+	private void save() {
+		if ( name.getText().toString().length() > 0 ) {
 			String type = null;
 			
 				
@@ -152,7 +158,6 @@ public class DetailForm extends Activity {
 							type, notes.getText().toString(), feed.getText().toString() );
 				}
 				
-				finish();
 		}
 	};
 
