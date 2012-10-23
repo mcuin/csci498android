@@ -75,6 +75,12 @@ public class FeedActivity extends Activity {
 		
 		setListAdapter(new FeedAdapter( feed ) );
 	}
+	
+	private void setListAdapter(FeedAdapter feedAdapter) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void goBlooey(Throwable t) {
 	AlertDialog.Builder builder = new AlertDialog.Builder( this );
 	builder

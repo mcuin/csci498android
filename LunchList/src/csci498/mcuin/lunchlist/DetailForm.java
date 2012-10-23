@@ -94,6 +94,13 @@ public class DetailForm extends Activity {
 			locMgr.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, onLocationChange );
 		}
 		
+		else if ( item.getItemId() == R.id.map ) {
+			Intent i = new Intent( this, RestaurantMap.class );
+			startActivity( i );
+			
+			return true;
+		}
+		
 		return super.onOptionsItemSelected( item );
 		
 	}
@@ -109,6 +116,7 @@ public class DetailForm extends Activity {
 	public boolean onPrepareOptionsMenu( Menu menu ) {
 		if ( restaurantId == null ) {
 			menu.findItem( R.id.location ).setEnabled( false );
+			menu.findItem( R.id.map ).setEnabled( false );
 		}
 		
 		return super.onPrepareOptionsMenu( menu );
