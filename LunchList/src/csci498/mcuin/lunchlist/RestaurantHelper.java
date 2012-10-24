@@ -97,7 +97,7 @@ class RestaurantHelper extends SQLiteOpenHelper {
 		return c.getDouble( 6 );
 	}
 	
-	public double getLongitute( Cursor c ) {
+	public double getLongitude( Cursor c ) {
 		return c.getDouble( 7 );
 	}
 	
