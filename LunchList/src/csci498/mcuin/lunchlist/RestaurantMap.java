@@ -6,6 +6,8 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import com.google.android.maps.MapActivity;
 
 public class RestaurantMap extends MapActivity {
@@ -58,9 +60,15 @@ public class RestaurantMap extends MapActivity {
     }
     
     @Override
+    protected boolean onTap( int i ) {
+    	Toast.makeText( RestaurantMap.this, item.getSnippet(), Toast.LENGTH_SHORT).show();
+    	
+    	return true;
+    }
+    
+    @Override
     public int size() { 
     	return 1;
     }
-	}
-
+}
 }
