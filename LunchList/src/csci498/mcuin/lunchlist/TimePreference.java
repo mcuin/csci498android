@@ -12,13 +12,13 @@ public class TimePreference extends DialogPreference {
 	private int lastMin = 0;
 	private TimePicker picker = null;
 	
-	private static int getHour( String time ) {
+	public static int getHour( String time ) {
 		String[] pieces = time.split( ":" );
 		
 		return Integer.parseInt( pieces[0] );
 	}
 	
-	private static int getMinute( String time ) {
+	public static int getMinute( String time ) {
 		String[] pieces = time.split( ":" );
 		
 		return Integer.parseInt( pieces[1] );
