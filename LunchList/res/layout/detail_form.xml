@@ -67,6 +67,11 @@
         
         <EditText android:id = "@+id/feed"
             android:hint = "Feed URL" />
+     
+    <TableRow>
+        <TextView android:text = "Phone:" />
+        <EditText android:id = "@+id/phone" android:inputType = "phone" />
+    </TableRow>
 
 </TableLayout>
 </ScrollView>

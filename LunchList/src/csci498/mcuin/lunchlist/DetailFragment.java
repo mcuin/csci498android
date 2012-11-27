@@ -6,7 +6,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,6 +38,7 @@ public class DetailFragment extends Fragment {
 	double latitude = 0.0d;
 	double longitude = 0.0d; 
 	private static final String ARG_REST_ID = "csci498.mcuin.lunchlist.ARG_REST_ID";
+	EditText phone = null;
 	
 	public static DetailFragment newInstance( long id ) {
 		DetailFragment result = new DetailFragment();
@@ -67,6 +70,7 @@ public class DetailFragment extends Fragment {
 		location = ( TextView )getView().findViewById( R.id.location );
 		locMgr = ( LocationManager )getActivity().getSystemService( Context.LOCATION_SERVICE ); 
 		Bundle args = getArguments();
+		phone = ( EditText )getView().findViewById( R.id.phone );
 		
 		if ( args != null ) {
 			loadRestaurant( args.getString( ARG_REST_ID ) );
@@ -128,6 +132,14 @@ public class DetailFragment extends Fragment {
 			startActivity( i );
 			
 			return true;
+		} else if ( item.getItemId() == R.id.call ) {
+			String toDial = "tel:" + phone.getText().toString();
+			
+			if ( toDial.length() > 4 ) {
+				startActivity( new Intent( Intent.ACTION_CALL, Uri.parse( toDial ) ) );
+			}
+		} else if ( item.getItemId() == R.id.help ) {
+			startActivity( new Intent( getActivity(), HelpPage.class ) );
 		}
 		
 		return super.onOptionsItemSelected( item );
@@ -148,6 +160,10 @@ public class DetailFragment extends Fragment {
 		if ( restaurantId == null ) {
 			menu.findItem( R.id.location ).setEnabled( false );
 			menu.findItem( R.id.map ).setEnabled( false );
+		}
+		
+		if ( isTelephonyAvailable() ) {
+			menu.findItem( R.id.call ).setEnabled( true );
 		}
 	}
 	
@@ -225,6 +241,11 @@ public class DetailFragment extends Fragment {
 		}
 	};
 	
+	@SuppressLint("NewApi")
+	private boolean isTelephonyAvailable() {
+		return getActivity().getPackageManager().hasSystemFeature( "android.hardware.telephony" );
+	}
+	
 	private void save() {
 		if ( name.getText().toString().length() > 0 ) {
 			String type = null;
@@ -244,10 +265,10 @@ public class DetailFragment extends Fragment {
 				
 				if( restaurantId == null ) {
 					helper.insert( name.getText().toString(), address.getText().toString(),
-							type, notes.getText().toString(), feed.getText().toString() );
+							type, notes.getText().toString(), feed.getText().toString(), phone.getText().toString() );
 				} else {
 					helper.update( restaurantId, name.getText().toString(), address.getText().toString(), 
-							type, notes.getText().toString(), feed.getText().toString() );
+							type, notes.getText().toString(), feed.getText().toString(), phone.getText().toString() );
 				}
 				
 		}

@@ -34,7 +34,7 @@ class RestaurantHelper extends SQLiteOpenHelper {
 		}
 	}
 	
-	public void insert( String name, String address, String type, String notes, String feed ) {
+	public void insert( String name, String address, String type, String notes, String feed, String phone ) {
 		ContentValues cv = new ContentValues();
 		
 		cv.put( "name", name );
@@ -47,7 +47,7 @@ class RestaurantHelper extends SQLiteOpenHelper {
 		getWritableDatabase().insert( "restaurants", "name", cv );
 	}
 	
-	public void update( String id, String name, String address, String type, String notes, String feed ) {
+	public void update( String id, String name, String address, String type, String notes, String feed, String phone ) {
 		ContentValues cv = new ContentValues();
 		String[] args = { id };
 		
