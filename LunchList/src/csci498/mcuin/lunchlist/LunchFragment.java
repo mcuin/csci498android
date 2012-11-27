@@ -68,6 +68,8 @@ public class LunchFragment extends ListFragment {
     		startActivity( new Intent( getActivity(), EditPreferences.class ) );
     		
     		return( true );
+    	} else if ( item.getItemId() == R.id.help ) {
+    		startActivity( new Intent( getActivity(), HelpPage.class ) );
     	}
     	
     	return( super.onOptionsItemSelected( item ) );

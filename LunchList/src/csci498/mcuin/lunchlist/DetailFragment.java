@@ -102,6 +102,8 @@ public class DetailFragment extends Fragment {
 				i.putExtra( FeedActivity.FEED_URL, feed.getText().toString() );
 				startActivity( i );
 				
+			} else if ( item.getItemId() == R.id.help ) {
+				startActivity( new Intent( getActivity(), HelpPage.class ) );
 			}
 			else {
 				Toast.makeText( getActivity(), "Sorry the Internet is not available", 
