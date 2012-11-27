@@ -34,9 +34,9 @@ public class LunchList extends FragmentActivity implements LunchFragment.OnResta
     		FragmentTransaction xaction = fragMgr.beginTransaction();
     		
     		xaction
-    			.add( R.id.details, details );
-    			.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
-    			.addToBackStack( null );
+    			.add( R.id.details, details )
+    			.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN )
+    			.addToBackStack( null )
     			.commit();
     	} else {
     		details.loadRestaurant( String.valueOf( id ) );
