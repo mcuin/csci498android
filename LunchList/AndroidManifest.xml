@@ -4,7 +4,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="15" />
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:smallScreens="false"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -32,6 +32,8 @@
         <activity android:name = ".FeedActivity"></activity>
         <service android:name = ".FeedService"></service>
         <service android:name = ".WidgetService"></service>
+        <service android:name = ".ListWidgetService" android:permission = 
+            "android.permission.BIND_REMOTEVIEWS" ></service>
         <reciever android:name = ".OnBootReciever" android:enabled = "false" >
         	<intent-filter>
         	    <action android:name = "android.intent.action.BOOT_COMPLETE" />
