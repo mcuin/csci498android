@@ -35,6 +35,17 @@ public class DetailFragment extends Fragment {
 	LocationManager locMgr = null;
 	double latitude = 0.0d;
 	double longitude = 0.0d; 
+	private static final String ARG_REST_ID = "csci498.mcuin.lunchlist.ARG_REST_ID";
+	
+	public static DetailFragment newInstance( long id ) {
+		DetailFragment result = new DetailFragment();
+		Bundle args = new Bundle();
+		
+		args.putString( ARG_REST_ID, String.valueOf( id ) );
+		result.setArguments( args );
+		
+		return result;
+	}
 	
 	
 	@Override
@@ -42,18 +53,6 @@ public class DetailFragment extends Fragment {
 		super.onCreate( savedInstanceState );
 		
 		setHasOptionsMenu( true );
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		
-		helper = new RestaurantHelper( getActivity() );
-		restaurantId = getActivity().getIntent().getStringExtra( LunchList.ID_EXTRA );
-		
-		if ( restaurantId != null ) {
-			load();
-		}
 	}
 	
 	@Override
@@ -67,6 +66,11 @@ public class DetailFragment extends Fragment {
 		feed = ( EditText )getView().findViewById( R.id.feed );
 		location = ( TextView )getView().findViewById( R.id.location );
 		locMgr = ( LocationManager )getActivity().getSystemService( Context.LOCATION_SERVICE ); 
+		Bundle args = getArguments();
+		
+		if ( args != null ) {
+			loadRestaurant( args.getString( ARG_REST_ID ) );
+		}
 	}
 	
 	public View onCreateLayout( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
@@ -155,25 +159,40 @@ public class DetailFragment extends Fragment {
 		
 	}
 	
+	public void loadRestaurant( String restaurantId ) {
+		this.restaurantId = restaurantId;
+		
+		if ( restaurantId != null ) {
+			load();
+		}
+	}
+	
+	private RestaurantHelper getHelper() {
+		if ( helper == null ) {
+			helper = new RestaurantHelper( getActivity() );
+		}
+		return helper;
+	}
+	
 	private void load() {
-		Cursor c = helper.getById( restaurantId );
+		Cursor c = getHelper().getById( restaurantId );
 		
 		c.moveToFirst();
-		name.setText( helper.getName( c ) );
-		address.setText( helper.getAddress( c ) );
-		notes.setText( helper.getNotes( c ) );
-		feed.setText( helper.getFeed( c ) );
+		name.setText( getHelper().getName( c ) );
+		address.setText( getHelper().getAddress( c ) );
+		notes.setText( getHelper().getNotes( c ) );
+		feed.setText( getHelper().getFeed( c ) );
 		
-		if( helper.getType( c ).equals( "sit_down") ) {
+		if( getHelper().getType( c ).equals( "sit_down") ) {
 			types.check( R.id.sit_down );
-		} else if ( helper.getType( c ).equals( "take_out ") ) {
+		} else if ( getHelper().getType( c ).equals( "take_out ") ) {
 			types.check( R.id.take_out );
 		} else {
 			types.check( R.id.delivery );
 		}
 		
-		latitude = helper.getLatitude( c );
-		longitude = helper.getLongitude( c );
+		latitude = getHelper().getLatitude( c );
+		longitude = getHelper().getLongitude( c );
 		
 		location.setText( String.valueOf( helper.getLatitude( c ) ) + ", " +
 		String.valueOf( helper.getLongitude( c ) ) );

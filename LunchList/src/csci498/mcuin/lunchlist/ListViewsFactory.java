@@ -3,13 +3,16 @@ package csci498.mcuin.lunchlist;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
+import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
 import android.database.sqlite.SQLiteDatabase;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ListViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context ctxt = null;
 	private RestaurantHelper helper = null;
